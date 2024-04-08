@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Student;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
 class StudentController extends Controller
@@ -33,16 +33,14 @@ class StudentController extends Controller
         $student->save();
         return redirect()->back()->with('status', 'Them sinh vien thanh cong');
     }
-
-    //liet ke - react - R
+    //liet ke - React - R
     public function index()
     {
-        $students = Student::all();
-        return view('student.index', compact('students')); //tim den file index.blade.php trong thu muc view/student
+        $students = Student::all();  //lay tat ca du lieu trong bang student
+        return view('student.index', compact('students')); //tim den file index.blade.php trong thu muc views/student
     }
 
-    
-    //cap nhat -update - U
+    //cap nhat - Update - U
     public function edit($id)
     {
         //tim student theo id
@@ -50,7 +48,7 @@ class StudentController extends Controller
         return view('student.edit', compact('student'));
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         //tim student theo id
         $student = Student::find($id);
@@ -60,7 +58,7 @@ class StudentController extends Controller
         if ($request->hasFile('anhdaidien')) {
             //co file dinh kem trong form update thi tim file cu va xoa di
             //neu truoc do ko co anh dai dien cu thi ko xoa
-            $anhcu = 'uploads/students/' .$student->anhdaidien;
+            $anhcu = 'uploads/students/' . $student->anhdaidien;
             if (File::exists($anhcu)) {
                 File::delete($anhcu);
             }
@@ -71,20 +69,17 @@ class StudentController extends Controller
             $student->anhdaidien = $filename;
         }
         $student->update();
-        return redirect()->back()->with('status', 'Cap nhat thanh cong');
+        return redirect()->back()->with('status', 'Cap nhat sinh vien voi anh dai dien thanh cong');
     }
-
-
-
-    //Xoa - delete - D
-    public function delete($id){
+    //xoa - Delete - D
+    public function delete($id)
+    {
         $student = Student::find($id);
-        $anhdaidien = 'uploads/students/' .$student->anhdaidien;
+        $anhdaidien = 'uploads/students/' . $student->anhdaidien;
         if (File::exists($anhdaidien)) {
             File::delete($anhdaidien);
         }
-
         $student->delete();
-        return redirect()->back()->with('status', 'Xoa thanh cong');
+        return redirect()->back()->with('status', 'Xóa sinh viên và ảnh đại diện thành công');
     }
 }
